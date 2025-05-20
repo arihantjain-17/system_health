@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>System Health Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white shadow-lg rounded-xl p-10 w-full max-w-xl">
+        <h1 class="text-3xl font-bold text-center text-indigo-700 mb-6">🔧 System Health Report</h1>
+
+        {% if data %}
+        <ul class="space-y-4 text-gray-700 text-lg">
+            <li><span class="font-semibold text-gray-900">🆔 Machine ID:</span> {{ data.machine_id }}</li>
+            <li><span class="font-semibold text-gray-900">💻 OS:</span> {{ data.os }}</li>
+            <li><span class="font-semibold text-gray-900">🖥️ Hostname:</span> {{ data.hostname }}</li>
+            <li><span class="font-semibold text-gray-900">🔒 Disk Encryption:</span> {{ data.disk_encryption }}</li>
+            <li><span class="font-semibold text-gray-900">🔄 OS Update:</span> {{ data.os_update }}</li>
+            <li><span class="font-semibold text-gray-900">🛡️ Antivirus:</span> {{ data.antivirus }}</li>
+            <li><span class="font-semibold text-gray-900">💤 Sleep OK:</span> {{ data.sleep_ok }}</li>
+            <li><span class="font-semibold text-gray-900">🕒 Timestamp:</span> {{ data.timestamp }}</li>
+        </ul>
+        {% else %}
+        <p class="text-red-500 text-center text-xl mt-4">❌ No data found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

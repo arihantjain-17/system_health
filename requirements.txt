@@ -1,0 +1,6 @@
+psutil
+schedule
+requests
+# Windows only
+wmi; platform_system=="Windows"
+Flask
