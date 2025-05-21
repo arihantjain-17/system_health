@@ -4,48 +4,103 @@ https://drive.google.com/file/d/1rrKtqXzGGlRc7VnmTsKzoqx0oBff3UCu/view?usp=shari
 
 # 🧠 System Health Dashboard
 
-A simple, modern Flask-based web application that collects and displays system health reports in real-time using MongoDB for data storage and Tailwind CSS for a sleek frontend.
+A Python-based background system health monitoring tool that periodically collects system configuration and health data (like disk encryption status, OS updates, antivirus, and sleep settings) and uploads it to a MongoDB Atlas database. Ideal for auditing and centralized system monitoring.
+
+## 📦 Features
+
+- ✅ Disk encryption check
+- 🛡️ Antivirus status check
+- 🕒 OS update status
+- 💤 Sleep timeout settings
+- 🧠 Collects device hardware info
+- ☁️ Pushes data to MongoDB Atlas only when changes are detected
+- 🔁 Runs every 30 minutes as a background daemon
+- 📄 Saves state locally in `state.json` to detect config changes
 
 ---
 
-## 🚀 Features
+## ⚙️ Project Structure
+```
+system_health/
+├── checks/
+│ ├── antivirus.py
+│ ├── disk_encryption.py
+│ ├── os_update.py
+│ └── sleep_settings.py
+├── utils/
+│ └── system_info.py
+├── daemon/
+│ └── watcher.py
+├── main.py
+├── requirements.txt
+└── README.md
+```
 
-- 📦 POST endpoint to receive system health reports
-- 🧾 View latest report data on a web dashboard
-- 🎨 Beautiful Tailwind CSS frontend
-- 📅 Automatically stores timestamp for each report
-- ☁️ Cloud MongoDB (MongoDB Atlas) integration
-
----
-
-
----
-
-## 🛠 Technologies Used
-
-- **Python 3**
-- **Flask**
-- **MongoDB Atlas**
-- **Flask-PyMongo**
-- **Tailwind CSS**
+> ✅ When compiled, `state.json` is automatically created in the same directory as the `watcher.exe`.
 
 ---
 
-## 📡 API Endpoints
+## ⚙️ Prerequisites
 
-### `POST /api/report`
+- Python 3.8+
+- pip
+- MongoDB Atlas URI or local MongoDB server
 
-Saves system health data to the MongoDB database.
+---
 
-#### 🔸 Request JSON Example:
-```json
-{
-  "machine_id": "ABC123",
-  "os": "Windows 11",
-  "hostname": "user-PC",
-  "disk_encryption": "Enabled",
-  "os_update": "Up to date",
-  "antivirus": "Active",
-  "sleep_ok": "Yes"
-}
+## 🚀 Setup Instructions
 
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/arihantjain-17/system_health.git
+cd system_health
+```
+
+### 2. Install Dependencies
+```bash
+pip install -r requirements.txt
+pip install pymongo schedule
+```
+### 3.Configure MongoDB
+Open daemon/watcher.py and update this line with your MongoDB connection string:
+```
+MONGO_URI = "your_mongodb_uri"
+```
+
+▶️ Run the Program
+```
+python main.py
+```
+This will:
+ - Run initial health checks
+- Insert data to MongoDB if new or changed
+- Store local state in state.json
+- Schedule next run in 30 minutes
+
+###🛠️ Build Executable (.exe) for windows
+
+1. Install PyInstaller
+```bash
+pip install pyinstaller
+```
+2 Create the Executable
+```bash
+pyinstaller --onefile main.py --name watcher
+```
+3.  Navigate to the dist/ folder and run the executable
+```bash
+./watcher.exe
+```
+###🐞 Common Issue
+###If you see this error:
+```
+TypeError: Object of type ObjectId is not JSON serializable
+```
+###✅ Fix: After inserting the document into MongoDB, remove _id before saving to state.json:
+```
+current.pop("_id", None)
+```
+👤 Author
+Arihant Jain
+GitHub: @arihantjain2003
